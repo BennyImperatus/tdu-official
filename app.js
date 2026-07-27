@@ -17,11 +17,11 @@ const ROBLOX_CONFIG = {
     }
 };
 
-// CORS Proxy Base URL - eigener Cloudflare Worker statt öffentlichem corsproxy.io,
-// um Rate-Limits und Ausfälle des Fremd-Proxies zu vermeiden.
-// Ersetze dies mit deiner eigenen Worker-URL, z.B.:
-// "https://tdu-roblox-proxy.deinaccount.workers.dev/?url="
-const CORS_PROXY_BASE = "https://corsproxy.io/?url=";
+// Proxy Base URL
+// Läuft als eigene Vercel Serverless Function unter /api/roblox-proxy
+// (siehe api/roblox-proxy.js) -> Same-Origin-Request, kein CORS-Proxy-Umweg mehr,
+// keine 403-Sperren von corsproxy.io mehr möglich.
+const CORS_PROXY_BASE = "/api/roblox-proxy?url=";
 
 function buildProxiedUrl(targetUrl) {
     return `${CORS_PROXY_BASE}${encodeURIComponent(targetUrl)}`;
