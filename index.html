@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TDU - Training & Discipline Unit | HCPD</title>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Official website of the Training & Discipline Unit (TDU) within Harford County Police Department (HCPD) Roblox. Discover our staff, check requirements, and apply today.">
+    <meta name="keywords" content="Roblox, HCPD, TDU, Training and Discipline Unit, Harford County Police Department, Roblox Group Website">
+    <meta name="author" content="TDU Command">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+    <!-- Grid Background Decoration -->
+    <div class="grid-overlay"></div>
+    <div class="glow-radial glow-blue"></div>
+    <div class="glow-radial glow-gold"></div>
+
+    <!-- Main Navigation Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <a href="#home" class="logo" id="header-logo">
+                <span class="logo-accent">TDU</span>
+                <span class="logo-separator">//</span>
+                <span class="logo-text">HCPD</span>
+            </a>
+            
+            <!-- Pill Navigation Menu -->
+            <nav class="pill-nav" id="main-navigation">
+                <div class="nav-active-pill" id="nav-pill-indicator"></div>
+                <a href="#home" class="nav-link active" data-tab="home" id="nav-btn-home">
+                    <i class="fa-solid fa-house"></i> <span>Home</span>
+                </a>
+                <a href="#our-team" class="nav-link" data-tab="our-team" id="nav-btn-team">
+                    <i class="fa-solid fa-users"></i> <span>Our Team</span>
+                </a>
+                <a href="#about-us" class="nav-link" data-tab="about-us" id="nav-btn-about">
+                    <i class="fa-solid fa-circle-info"></i> <span>About Us</span>
+                </a>
+                <a href="#join-us" class="nav-link" data-tab="join-us" id="nav-btn-join">
+                    <i class="fa-solid fa-signature"></i> <span>Join Us</span>
+                </a>
+                <a href="#fun-things" class="nav-link" data-tab="fun-things" id="nav-btn-fun">
+                    <i class="fa-solid fa-gamepad"></i> <span>Fun Things</span>
+                </a>
+                <a href="#gallery" class="nav-link" data-tab="gallery" id="nav-btn-gallery">
+                    <i class="fa-solid fa-images"></i> <span>Gallery</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- App Content Wrapper -->
+    <main class="content-wrapper">
+        
+        <!-- HOME TAB -->
+        <section id="home-tab" class="tab-content active-tab">
+            <div class="hero-section">
+                <!-- True Focus Animated Text -->
+                <div class="true-focus-container" id="true-focus-title">
+                    <div class="focus-bracket-overlay" id="focus-bracket">
+                        <div class="corner top-left"></div>
+                        <div class="corner top-right"></div>
+                        <div class="corner bottom-left"></div>
+                        <div class="corner bottom-right"></div>
+                    </div>
+                    <div class="words-wrapper" id="true-focus-words">
+                        <!-- Spans generated dynamically by JS -->
+                    </div>
+                </div>
+                
+                <p class="hero-subtitle">
+                    Forging elite officers, enforcing absolute standards, maintaining unmatched discipline in Harford County.
+                </p>
+                
+                <div class="hero-actions">
+                    <button class="specular-btn" data-target="our-team" id="hero-btn-team">
+                        <span>Meet Our Instructors</span>
+                    </button>
+                    <button class="specular-btn specular-btn-gold" data-target="join-us" id="hero-btn-join">
+                        <span>Enlist in TDU</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Section (with Count Up) -->
+            <div class="stats-grid">
+                <div class="stat-card glass-panel" id="stat-members">
+                    <div class="stat-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="stat-value" id="count-total-members" data-target="382">0</div>
+                    <div class="stat-label">Total TDU Members</div>
+                </div>
+                <div class="stat-card glass-panel" id="stat-instructors">
+                    <div class="stat-icon"><i class="fa-solid fa-user-tie"></i></div>
+                    <div class="stat-value" id="count-active-instructors" data-target="42">0</div>
+                    <div class="stat-label">Active Instructors</div>
+                </div>
+                <div class="stat-card glass-panel" id="stat-trainings">
+                    <div class="stat-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <div class="stat-value" id="count-grad-rate" data-target="96">0</div>
+                    <div class="stat-label">Graduation Rate %</div>
+                </div>
+            </div>
+
+            <!-- Dashboard Welcome Briefing -->
+            <div class="welcome-grid">
+                <div class="briefing-card glass-panel">
+                    <h3>Commanding Officer's Briefing</h3>
+                    <p class="briefing-meta">STATUS: ACTIVE // CLASSIFICATION: PUBLIC</p>
+                    <p>
+                        Welcome to the Training & Discipline Unit (TDU). Our mission is to instruct, evaluate, and hold all personnel within the Harford County Police Department to the highest standard of police ethics and tactics.
+                    </p>
+                    <p>
+                        Through intensive cadet evaluations, rigorous probationary check-ins, and tactical field training courses, TDU ensures that every officer wearing the HCPD badge is professional, precise, and prepared.
+                    </p>
+                </div>
+                <div class="quick-links-card glass-panel">
+                    <h3>Directives</h3>
+                    <ul class="directives-list">
+                        <li>
+                            <i class="fa-solid fa-chevron-right text-blue"></i>
+                            <div>
+                                <strong>Read Code of Conduct</strong>
+                                <span>Always uphold integrity and respect during active duty.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chevron-right text-blue"></i>
+                            <div>
+                                <strong>Instructor Roster</strong>
+                                <span>Check the list of official instructors in the "Our Team" tab.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-chevron-right text-blue"></i>
+                            <div>
+                                <strong>Recruitment Form</strong>
+                                <span>Fill out the cadet registration standard to be selected for training.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- OUR TEAM TAB -->
+        <section id="our-team-tab" class="tab-content">
+            <div class="section-header">
+                <h2>Our Elite Team</h2>
+                <p>Live TDU Staff and Leadership directly synced with our Roblox Group Roster.</p>
+            </div>
+
+            <!-- Role Selector Tabs (Card Nav / Specular Buttons) -->
+            <div class="role-selector-container">
+                <div class="role-selector-pill" id="role-selector-indicator"></div>
+                <button class="role-tab-btn active" data-role="hq" id="role-tab-hq">Unit HQ</button>
+                <button class="role-tab-btn" data-role="hr" id="role-tab-hr">Unit HR</button>
+                <button class="role-tab-btn" data-role="staff" id="role-tab-staff">Unit Staff</button>
+                <button class="role-tab-btn" data-role="sr-instructors" id="role-tab-sr-inst">Senior Instructors</button>
+                <button class="role-tab-btn" data-role="instructors" id="role-tab-inst">Instructors</button>
+            </div>
+
+            <!-- Loader element -->
+            <div id="roster-loader" class="roster-loader-container">
+                <div class="spinner"></div>
+                <p>Accessing Roblox databases...</p>
+            </div>
+
+            <!-- Member Cards Grid -->
+            <div class="roster-grid-container">
+                <!-- Group HQ -->
+                <div id="role-group-hq" class="role-group-section active-role-group">
+                    <h3 class="role-heading"><i class="fa-solid fa-crown text-gold"></i> Unit HQ members</h3>
+                    <div class="members-grid" id="grid-hq"></div>
+                </div>
+
+                <!-- Group HR -->
+                <div id="role-group-hr" class="role-group-section">
+                    <h3 class="role-heading"><i class="fa-solid fa-star text-gold"></i> Unit HR</h3>
+                    <div class="members-grid" id="grid-hr"></div>
+                </div>
+
+                <!-- Group Staff -->
+                <div id="role-group-staff" class="role-group-section">
+                    <h3 class="role-heading"><i class="fa-solid fa-shield text-blue"></i> Unit Staff</h3>
+                    <div class="members-grid" id="grid-staff"></div>
+                </div>
+
+                <!-- Group Senior Instructors -->
+                <div id="role-group-sr-instructors" class="role-group-section">
+                    <h3 class="role-heading"><i class="fa-solid fa-award text-blue"></i> Senior Instructors</h3>
+                    <div class="members-grid" id="grid-sr-instructors"></div>
+                </div>
+
+                <!-- Group Instructors -->
+                <div id="role-group-instructors" class="role-group-section">
+                    <h3 class="role-heading"><i class="fa-solid fa-user-shield text-blue"></i> Instructors</h3>
+                    <div class="members-grid" id="grid-instructors"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT US TAB -->
+        <section id="about-us-tab" class="tab-content">
+            <div class="section-header">
+                <h2>About the Unit</h2>
+                <p>The operational pillars of the HCPD Training & Discipline Unit.</p>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-card glass-panel">
+                    <div class="about-icon"><i class="fa-solid fa-crosshairs"></i></div>
+                    <h3>Core Mission</h3>
+                    <p>
+                        TDU serves as the educational backbone of the Harford County Police Department. We deliver modern, tactical training programs for cadets, and implement objective evaluations to filter and promote high-quality personnel.
+                    </p>
+                </div>
+
+                <div class="about-card glass-panel">
+                    <div class="about-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <h3>Ethical Standard</h3>
+                    <p>
+                        We enforce strict compliance with department protocols. Our duty includes field inspections, training oversight, and administrative audits to ensure all police actions remain professional, respectful, and lawful.
+                    </p>
+                </div>
+
+                <div class="about-card glass-panel">
+                    <div class="about-icon"><i class="fa-solid fa-compass"></i></div>
+                    <h3>Leadership Core</h3>
+                    <p>
+                        A good officer is a leader first. TDU fosters decision-making capabilities, active communication under stress, and crisis mitigation strategies, molding recruits into community-facing exemplars.
+                    </p>
+                </div>
+            </div>
+
+            <div class="about-extra-panel glass-panel">
+                <div class="about-extra-text">
+                    <h3>Operational Pillars</h3>
+                    <p>
+                        Our officers are defined by three simple principles. These values are drilled into every cadet during the primary phases of the Academy:
+                    </p>
+                    <div class="pillars-row">
+                        <div class="pillar-box">
+                            <span class="pillar-num">01</span>
+                            <h4>Integrity</h4>
+                            <p>Do what is right, always, especially when no one is watching.</p>
+                        </div>
+                        <div class="pillar-box">
+                            <span class="pillar-num">02</span>
+                            <h4>Professionalism</h4>
+                            <p>Speak clearly, behave in a disciplined manner, and command authority respectfully.</p>
+                        </div>
+                        <div class="pillar-box">
+                            <span class="pillar-num">03</span>
+                            <h4>Preparedness</h4>
+                            <p>Know the law, maintain tactical awareness, and act with decisive speed.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- JOIN US TAB -->
+        <section id="join-us-tab" class="tab-content">
+            <div class="section-header">
+                <h2>Join TDU</h2>
+                <p>Review requirements, understand the pathway, and register for training.</p>
+            </div>
+
+            <div class="join-grid">
+                <!-- Requirements Column -->
+                <div class="requirements-panel glass-panel">
+                    <h3>Minimum Enlistment Criteria</h3>
+                    <ul class="req-checklist">
+                        <li>
+                            <div class="checkbox-circle checked"><i class="fa-solid fa-check"></i></div>
+                            <span>Active member in the Harford County Police Department</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-circle checked"><i class="fa-solid fa-check"></i></div>
+                            <span>Rank of Officer (L3) or above in HCPD</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-circle checked"><i class="fa-solid fa-check"></i></div>
+                            <span>No disciplinary warnings or bans within the last 30 days</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-circle checked"><i class="fa-solid fa-check"></i></div>
+                            <span>Active in Discord and possess a working microphone</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-circle checked"><i class="fa-solid fa-check"></i></div>
+                            <span>Understand basic radio codes and arrest protocols</span>
+                        </li>
+                    </ul>
+
+                    <div class="academy-steps">
+                        <h3>The Pathway to Instructor</h3>
+                        <div class="step-item">
+                            <div class="step-badge">1</div>
+                            <div>
+                                <h4>Submit Cadet Registration</h4>
+                                <p>Fill out the application with your current stats and details.</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-badge">2</div>
+                            <div>
+                                <h4>Pass Academy Phase</h4>
+                                <p>Complete physical tactics, shooting tests, and administrative lectures.</p>
+                            </div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-badge">3</div>
+                            <div>
+                                <h4>Field Evaluation</h4>
+                                <p>Serve under a Senior Instructor during field patrols to test real-time logic.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registration Form Column -->
+                <div class="form-panel glass-panel">
+                    <h3>Cadet Roster Registry</h3>
+                    <p class="form-instructions">
+                        Submit this form to register your interest. Custom Caret inputs are configured below.
+                    </p>
+
+                    <form id="tdu-application-form">
+                        <!-- Input with Smooth Caret: Username -->
+                        <div class="form-group">
+                            <label for="input-roblox-user">Roblox Username</label>
+                            <div class="smooth-input-wrapper">
+                                <input type="text" id="input-roblox-user" required autocomplete="off" placeholder="Enter Roblox Username">
+                                <div class="smooth-caret-track">
+                                    <span class="input-measure"></span>
+                                    <div class="smooth-caret"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Input with Smooth Caret: Discord Tag -->
+                        <div class="form-group">
+                            <label for="input-discord">Discord Username</label>
+                            <div class="smooth-input-wrapper">
+                                <input type="text" id="input-discord" required autocomplete="off" placeholder="username#0000 or username">
+                                <div class="smooth-caret-track">
+                                    <span class="input-measure"></span>
+                                    <div class="smooth-caret"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Input with Smooth Caret: Current Rank -->
+                        <div class="form-group">
+                            <label for="input-rank">Current HCPD Rank</label>
+                            <div class="smooth-input-wrapper">
+                                <input type="text" id="input-rank" required autocomplete="off" placeholder="e.g., Officer, Sergeant">
+                                <div class="smooth-caret-track">
+                                    <span class="input-measure"></span>
+                                    <div class="smooth-caret"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Standard Textarea -->
+                        <div class="form-group">
+                            <label for="input-statement">Why do you want to join TDU?</label>
+                            <textarea id="input-statement" rows="4" required placeholder="Describe your experience and goals..."></textarea>
+                        </div>
+
+                        <button type="submit" class="specular-btn specular-btn-blue w-full" id="btn-submit-app">
+                            <span>Submit Application</span>
+                        </button>
+                    </form>
+                    
+                    <div id="form-success-message" class="form-alert success glass-panel hidden">
+                        <i class="fa-solid fa-circle-check text-blue"></i>
+                        <div>
+                            <h4>Application Registered</h4>
+                            <p>Your registry packet has been logged. TDU Command will review it.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FUN THINGS TAB -->
+        <section id="fun-things-tab" class="tab-content">
+            <div class="section-header">
+                <h2>Fun Area</h2>
+                <p>Test your policing logic or read TDU lore.</p>
+            </div>
+
+            <div class="fun-grid">
+                <!-- TDU Aptitude Quiz Card -->
+                <div class="quiz-card glass-panel" id="quiz-block">
+                    <div class="quiz-header">
+                        <h3>TDU Instructor Aptitude Test</h3>
+                        <p class="quiz-progress" id="quiz-progress-label">Question 1 of 4</p>
+                    </div>
+
+                    <div class="quiz-body">
+                        <div class="question-container" id="quiz-question-container">
+                            <h4 id="quiz-question-text">Loading question...</h4>
+                            <div class="options-list" id="quiz-options-list">
+                                <!-- Option buttons rendered by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-footer">
+                        <button class="specular-btn sm" id="quiz-btn-next" style="display: none;">
+                            <span>Next Question</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lore/Quote Card -->
+                <div class="lore-card glass-panel">
+                    <h3>Officer Quotes & Academy Wisdom</h3>
+                    <div class="lore-content">
+                        <i class="fa-solid fa-quote-left quote-icon text-blue"></i>
+                        <p id="tdu-quote-text" class="quote-text">
+                            "Discipline is not about punishment. It's about preparation. If you cannot stand straight in the briefing, you will not shoot straight in the firefight."
+                        </p>
+                        <span id="tdu-quote-author" class="quote-author">— Commander Vance, TDU Founder</span>
+                    </div>
+                    <button class="specular-btn sm" id="btn-next-quote">
+                        <span>Read Next Quote</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- GALLERY TAB -->
+        <section id="gallery-tab" class="tab-content">
+            <div class="section-header">
+                <h2>Photo Gallery</h2>
+                <p>Academy classes, tactical operations, and group milestones.</p>
+            </div>
+
+            <div class="gallery-grid" id="gallery-container">
+                <!-- Gallery items rendered dynamically by JS -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Fullscreen Image Modal Overlay -->
+    <div class="gallery-modal" id="gallery-modal-overlay">
+        <span class="modal-close-btn" id="modal-close-btn">&times;</span>
+        <img class="modal-img-content" id="modal-img-tag" src="" alt="Fullscreen view">
+        <div class="modal-caption-text" id="modal-caption-tag"></div>
+    </div>
+
+    <!-- Footnotes -->
+    <footer class="site-footer">
+        <p>&copy; 2026 HCPD Training & Discipline Unit. Created for Roblox Simulation purposes.</p>
+    </footer>
+
+    <!-- App JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>
