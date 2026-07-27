@@ -4,13 +4,13 @@
 
 // Roblox Integration Configuration
 const ROBLOX_CONFIG = {
-    groupId: 67364868, // Default Roblox Group ID (Replace with your actual group ID)
+    groupId: 67364868,
     roles: {
-        hq: { ranks: [30, 6], label: "Unit HQ" },
-        hr: { ranks: [15, 14], label: "Unit HR" },
-        staff: { ranks: [13], label: "Unit Staff" },
-        srInstructors: { ranks: [10], label: "Senior Instructors" },
-        instructors: { ranks: [5], label: "Instructors" }
+        hq:            { ranks: [6, 30], label: "Unit HQ" },
+        hr:            { ranks: [14, 15], label: "Unit HR" },
+        staff:         { ranks: [13, 13], label: "Unit Staff" },
+        srInstructors: { ranks: [10, 10], label: "Senior Instructors" },
+        instructors:   { ranks: [5, 5], label: "Instructors" }
     }
 };
 
