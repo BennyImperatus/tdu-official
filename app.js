@@ -17,32 +17,44 @@ const ROBLOX_CONFIG = {
     }
 };
 
-// CORS Proxy Fallback Chain – mehrere Proxies werden nacheinander probiert,
-// falls der erste nicht funktioniert (Rate-Limit, Down, Blocked).
-const CORS_PROXIES = [
+// Proxy Konfiguration
+// WICHTIG: Öffentliche CORS-Proxies (allorigins.win, corsproxy.io, codetabs.com)
+// sind inzwischen ALLE gesperrt gegen groups.roblox.com / thumbnails.roblox.com
+// (403 / fehlende CORS-Header). Deshalb läuft der Proxy jetzt als eigene
+// Vercel Serverless Function unter /api/roblox-proxy (siehe api/roblox-proxy.js).
+// Das ist same-origin -> kein CORS-Problem mehr, keine Fremd-Rate-Limits.
+const OWN_PROXY_BASE = "/api/roblox-proxy?url=";
+
+// Externe Proxies bleiben nur noch als allerletzter Notnagel drin, falls die
+// eigene Function mal down sein sollte (z.B. Vercel-Outage).
+const FALLBACK_CORS_PROXIES = [
     "https://api.allorigins.win/raw?url=",
     "https://corsproxy.io/?url=",
     "https://api.codetabs.com/v1/proxy?quest="
 ];
 
-function buildProxiedUrl(targetUrl, proxyIndex = 0) {
-    const proxy = CORS_PROXIES[proxyIndex % CORS_PROXIES.length];
+function buildProxiedUrl(targetUrl, attemptIndex = 0) {
+    if (attemptIndex === 0) {
+        return `${OWN_PROXY_BASE}${encodeURIComponent(targetUrl)}`;
+    }
+    const proxy = FALLBACK_CORS_PROXIES[(attemptIndex - 1) % FALLBACK_CORS_PROXIES.length];
     return `${proxy}${encodeURIComponent(targetUrl)}`;
 }
 
 async function fetchWithProxyFallback(targetUrl, options) {
+    const totalAttempts = 1 + FALLBACK_CORS_PROXIES.length; // eigener Proxy + Notnagel-Kette
     let lastErr = null;
-    for (let i = 0; i < CORS_PROXIES.length; i++) {
+    for (let i = 0; i < totalAttempts; i++) {
         try {
             const url = buildProxiedUrl(targetUrl, i);
             const resp = await fetch(url, options);
             if (resp.ok) return resp;
-            lastErr = new Error(`Proxy ${i} HTTP ${resp.status}`);
+            lastErr = new Error(`Proxy attempt ${i} HTTP ${resp.status}`);
         } catch (e) {
             lastErr = e;
         }
     }
-    throw lastErr || new Error("All CORS proxies failed");
+    throw lastErr || new Error("All proxies failed");
 }
 
 // High-Fidelity Mock Data Fallback (Loads if Roblox API is offline or Group ID is placeholder)
@@ -413,7 +425,7 @@ async function initRosterFetcher() {
     console.log(`[TDU Roster] Starting live sync for group ID: ${groupId}`);
 
     try {
-        // Step 1: Fetch Group Roles List via CORS Proxy
+        // Step 1: Fetch Group Roles List via Proxy
         const rolesUrl = `https://groups.roblox.com/v1/groups/${groupId}/roles`;
         console.log(`[TDU Roster] Fetching roles from: ${rolesUrl}`);
 
