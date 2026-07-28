@@ -17,14 +17,32 @@ const ROBLOX_CONFIG = {
     }
 };
 
-// Proxy Base URL
-// Läuft als eigene Vercel Serverless Function unter /api/roblox-proxy
-// (siehe api/roblox-proxy.js) -> Same-Origin-Request, kein CORS-Proxy-Umweg mehr,
-// keine 403-Sperren von corsproxy.io mehr möglich.
-const CORS_PROXY_BASE = "/api/roblox-proxy?url=";
+// CORS Proxy Fallback Chain – mehrere Proxies werden nacheinander probiert,
+// falls der erste nicht funktioniert (Rate-Limit, Down, Blocked).
+const CORS_PROXIES = [
+    "https://api.allorigins.win/raw?url=",
+    "https://corsproxy.io/?url=",
+    "https://api.codetabs.com/v1/proxy?quest="
+];
 
-function buildProxiedUrl(targetUrl) {
-    return `${CORS_PROXY_BASE}${encodeURIComponent(targetUrl)}`;
+function buildProxiedUrl(targetUrl, proxyIndex = 0) {
+    const proxy = CORS_PROXIES[proxyIndex % CORS_PROXIES.length];
+    return `${proxy}${encodeURIComponent(targetUrl)}`;
+}
+
+async function fetchWithProxyFallback(targetUrl, options) {
+    let lastErr = null;
+    for (let i = 0; i < CORS_PROXIES.length; i++) {
+        try {
+            const url = buildProxiedUrl(targetUrl, i);
+            const resp = await fetch(url, options);
+            if (resp.ok) return resp;
+            lastErr = new Error(`Proxy ${i} HTTP ${resp.status}`);
+        } catch (e) {
+            lastErr = e;
+        }
+    }
+    throw lastErr || new Error("All CORS proxies failed");
 }
 
 // High-Fidelity Mock Data Fallback (Loads if Roblox API is offline or Group ID is placeholder)
@@ -392,19 +410,21 @@ function initSmoothCaretInputs() {
 async function initRosterFetcher() {
     const loader = document.getElementById("roster-loader");
     const groupId = ROBLOX_CONFIG.groupId;
-    
+    console.log(`[TDU Roster] Starting live sync for group ID: ${groupId}`);
+
     try {
         // Step 1: Fetch Group Roles List via CORS Proxy
         const rolesUrl = `https://groups.roblox.com/v1/groups/${groupId}/roles`;
-        const proxiedRolesUrl = buildProxiedUrl(rolesUrl);
-        
-        const rolesResponse = await fetch(proxiedRolesUrl);
-        if (!rolesResponse.ok) throw new Error("Roles request failed");
-        
+        console.log(`[TDU Roster] Fetching roles from: ${rolesUrl}`);
+
+        const rolesResponse = await fetchWithProxyFallback(rolesUrl);
         const rolesData = await rolesResponse.json();
         const groupRoles = rolesData.roles || [];
-        
+        console.log(`[TDU Roster] Received ${groupRoles.length} group roles`, groupRoles.map(r => ({ name: r.name, rank: r.rank, id: r.id })));
+
         // Map target categories to role objects
+        // WICHTIG: Reihenfolge ist SPEZIFISCH -> ALLGEMEIN, weil wir mit if/else if arbeiten.
+        // Sonst schluckt hq [6..30] Ränge wie 10, 13, 14, 15 die eigentlich zu anderen Kategorien gehören.
         const categoryMap = {
             hq: [],
             hr: [],
@@ -412,24 +432,32 @@ async function initRosterFetcher() {
             srInstructors: [],
             instructors: []
         };
-        
+
         groupRoles.forEach(role => {
             const rank = role.rank;
             const config = ROBLOX_CONFIG.roles;
-            
-            if (rank >= config.hq.ranks[0] && rank <= config.hq.ranks[1]) {
-                categoryMap.hq.push(role);
-            } else if (rank >= config.hr.ranks[0] && rank <= config.hr.ranks[1]) {
-                categoryMap.hr.push(role);
-            } else if (rank >= config.staff.ranks[0] && rank <= config.staff.ranks[1]) {
-                categoryMap.staff.push(role);
+
+            if (rank >= config.instructors.ranks[0] && rank <= config.instructors.ranks[1]) {
+                categoryMap.instructors.push(role);
             } else if (rank >= config.srInstructors.ranks[0] && rank <= config.srInstructors.ranks[1]) {
                 categoryMap.srInstructors.push(role);
-            } else if (rank >= config.instructors.ranks[0] && rank <= config.instructors.ranks[1]) {
-                categoryMap.instructors.push(role);
+            } else if (rank >= config.staff.ranks[0] && rank <= config.staff.ranks[1]) {
+                categoryMap.staff.push(role);
+            } else if (rank >= config.hr.ranks[0] && rank <= config.hr.ranks[1]) {
+                categoryMap.hr.push(role);
+            } else if (rank >= config.hq.ranks[0] && rank <= config.hq.ranks[1]) {
+                categoryMap.hq.push(role);
             }
         });
-        
+
+        console.log(`[TDU Roster] Role mapping result:`, {
+            hq: categoryMap.hq.map(r => r.name),
+            hr: categoryMap.hr.map(r => r.name),
+            staff: categoryMap.staff.map(r => r.name),
+            srInstructors: categoryMap.srInstructors.map(r => r.name),
+            instructors: categoryMap.instructors.map(r => r.name)
+        });
+
         // Collect users under each category
         const parsedRoster = {
             hq: [],
@@ -450,16 +478,25 @@ async function initRosterFetcher() {
 
         // Check if we fetched any members at all
         const totalFetched = Object.values(parsedRoster).reduce((acc, list) => acc + list.length, 0);
+        console.log(`[TDU Roster] Fetched ${totalFetched} total members`, {
+            hq: parsedRoster.hq.length,
+            hr: parsedRoster.hr.length,
+            staff: parsedRoster.staff.length,
+            "sr-instructors": parsedRoster["sr-instructors"].length,
+            instructors: parsedRoster.instructors.length
+        });
+
         if (totalFetched === 0) {
-            throw new Error("No members fetched from active ranks");
+            throw new Error("No members fetched from active ranks. Check groupId and rank ranges in ROBLOX_CONFIG.");
         }
 
         // Fetch avatars batch
         await attachAvatars(parsedRoster);
-        
+
         // Render dynamically-fetched roster
         renderRoster(parsedRoster);
         if (loader) loader.classList.add("hidden");
+        console.log(`[TDU Roster] Live sync SUCCESS. Roster rendered.`);
 
         // Update stats total TDU members count on Home
         const totalStat = document.getElementById("count-total-members");
@@ -469,7 +506,7 @@ async function initRosterFetcher() {
         }
 
     } catch (err) {
-        console.warn("Roblox Live Sync failed. Running fallback mock data. Error:", err.message);
+        console.error(`[TDU Roster] Roblox Live Sync FAILED. Running fallback mock data.`, err);
         // Load fallback mock images and roster
         await attachMockAvatars();
         renderRoster(MOCK_MEMBERS);
@@ -479,19 +516,20 @@ async function initRosterFetcher() {
 
 // Fetch members of a specific list of roles
 async function fetchMembersForRoles(rolesList, targetArray, defaultRoleName) {
-    if (!rolesList || rolesList.length === 0) return;
-    
+    if (!rolesList || rolesList.length === 0) {
+        console.log(`[TDU Roster] Skipping category "${defaultRoleName}": no roles mapped.`);
+        return;
+    }
+
     for (const role of rolesList) {
         try {
             const url = `https://groups.roblox.com/v1/groups/${ROBLOX_CONFIG.groupId}/roles/${role.id}/users?limit=50&sortOrder=Asc`;
-            const proxiedUrl = buildProxiedUrl(url);
-            
-            const response = await fetch(proxiedUrl);
-            if (!response.ok) continue;
-            
+            const response = await fetchWithProxyFallback(url);
+
             const data = await response.json();
             const users = data.data || [];
-            
+            console.log(`[TDU Roster] Role "${role.name}" (rank ${role.rank}): ${users.length} members`);
+
             users.forEach(user => {
                 targetArray.push({
                     userId: user.userId,
@@ -502,7 +540,7 @@ async function fetchMembersForRoles(rolesList, targetArray, defaultRoleName) {
                 });
             });
         } catch (e) {
-            console.error(`Failed to fetch role members for role ${role.id}`, e);
+            console.error(`[TDU Roster] Failed to fetch role members for role ${role.id} ("${role.name}")`, e);
         }
     }
 }
@@ -512,44 +550,50 @@ async function attachAvatars(roster) {
     // Gather all user IDs
     const userIds = [];
     const idToUserMap = {};
-    
+
     Object.values(roster).forEach(category => {
         category.forEach(user => {
             userIds.push(user.userId);
             idToUserMap[user.userId] = user;
         });
     });
-    
-    if (userIds.length === 0) return;
-    
+
+    if (userIds.length === 0) {
+        console.log(`[TDU Roster] No user IDs to fetch avatars for.`);
+        return;
+    }
+    console.log(`[TDU Roster] Fetching avatars for ${userIds.length} users...`);
+
     // Roblox headshots batch size limit is 100, chunk if necessary
     const chunks = [];
     for (let i = 0; i < userIds.length; i += 100) {
         chunks.push(userIds.slice(i, i + 100));
     }
-    
-    for (const chunk of chunks) {
+
+    let successCount = 0;
+    for (let c = 0; c < chunks.length; c++) {
+        const chunk = chunks[c];
         try {
             const idsParam = chunk.join(",");
             const avatarUrl = `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${idsParam}&size=150x150&format=Png&isCircular=false`;
-            const proxiedAvatarUrl = buildProxiedUrl(avatarUrl);
-            
-            const response = await fetch(proxiedAvatarUrl);
-            if (!response.ok) continue;
-            
+
+            const response = await fetchWithProxyFallback(avatarUrl);
+
             const data = await response.json();
             const avatars = data.data || [];
-            
+
             avatars.forEach(avatar => {
                 const user = idToUserMap[avatar.targetId];
                 if (user) {
                     user.avatarUrl = avatar.imageUrl || "";
+                    if (user.avatarUrl) successCount++;
                 }
             });
         } catch (e) {
-            console.error("Failed to fetch avatar batch", e);
+            console.error(`[TDU Roster] Failed to fetch avatar batch ${c + 1}/${chunks.length}`, e);
         }
     }
+    console.log(`[TDU Roster] Avatars loaded: ${successCount}/${userIds.length}`);
 }
 
 // Attach Roblox headshots to static mock users
