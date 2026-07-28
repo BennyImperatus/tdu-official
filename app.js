@@ -4,7 +4,7 @@
 
 // Roblox Integration Configuration
 const ROBLOX_CONFIG = {
-    groupId: 67364868, // Default Roblox Group ID (Replace with your actual group ID)
+    groupId: 11475140, // Default Roblox Group ID (Replace with your actual group ID)
     roles: {
         // ranks: [min, max] - Bugfix: Reihenfolge musste min->max sein, und
         // einzelne Ränge brauchen zwingend zwei Werte (z.B. [13, 13]),
